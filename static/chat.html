@@ -32,15 +32,32 @@
         }
 
         .Chat-Info{
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
             padding: 10px;
         }
 
         .Chat-Title{
             font-weight: 600;
+            width: 100%;
         }
 
         .Last-Seen{
             color: #979797;
+        }
+
+        .Chat-Controls{
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: flex;
+            gap: 30px;
+            padding: 15px;
+        }
+
+        .Chat-Control img {
+            width: 40px;
         }
     </style>
 </head>
