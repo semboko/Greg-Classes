@@ -11,9 +11,12 @@
             font-family: sans-serif;
         }
         header {
+            position: fixed;
+            z-index: 1;
             width: 100%;
             display: flex;
             border-bottom: 1px solid black;
+            background-color: #fff;
         }
         .Back-Btn {
             border: none;
@@ -22,7 +25,8 @@
         }
 
         .Back-Btn img {
-            width: 30px;
+            width: 40px;
+            margin-top: 15px;
         }
         
         .Avatar img {
@@ -59,13 +63,78 @@
         .Chat-Control img {
             width: 40px;
         }
+
+        .Messages-Container {
+            position: absolute;
+            bottom: 80px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            background-color: #D9E5EE;
+            gap: 10px;
+            min-height: 100%;
+        }
+
+        .Message {
+            padding: 10px;
+            max-width: 60%;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .Message-Info {
+            text-align: right;
+            font-size: 14px;
+            color: #7f7f7f;
+        }
+
+        .User-Message {
+            background-color: #2b6af1;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .User-Message .Message-Info {
+            color: #e5e5e5;
+        }
+
+        .Input-Container{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .Input-Container input {
+            background-color: #fff;
+            border: none;
+            width: calc(80% - 25px);
+            outline: none;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .Input-Container button {
+            background-color: #2b6af1;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            font-size: 16px;
+            width: calc(20% - 25px);
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <button class="Back-Btn">
+        <a class="Back-Btn" href="/static/index.html">
             <img src="./images/arrow-back.png" alt="">
-        </button>
+        </a>
         <div class="Avatar">
             <img src="https://i.pravatar.cc/100?id=2" alt="">
         </div>
@@ -82,5 +151,27 @@
             </div>
         </div>
     </header>
+    <div class="Messages-Container">
+        <div class="Message">
+            <div class="Message-Text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, cum.</div>
+            <div class="Message-Info">10:30 PM</div>
+        </div>
+        <div class="Message">
+            <div class="Message-Text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, cum.</div>
+            <div class="Message-Info">10:30 PM</div>
+        </div>
+        <div class="Message User-Message">
+            <div class="Message-Text">Lorem ipsum</div>
+            <div class="Message-Info">10:30 PM</div>
+        </div>
+        <div class="Message">
+            <div class="Message-Text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi fugiat voluptatibus ea aut, aliquam esse animi molestiae non accusamus placeat repellat debitis eum iste pariatur, saepe quos praesentium molestias quaerat! Fugiat numquam ducimus corrupti quas porro, ea eius ab repellat, praesentium deserunt, magni commodi hic iusto? Modi quod optio facere.</div>
+            <div class="Message-Info">10:30 PM</div>
+        </div>
+    </div>
+    <div class="Input-Container">
+        <input type="text" placeholder="Message">
+        <button>Send</button>
+    </div>
 </body>
 </html>
