@@ -67,6 +67,9 @@
                     
                     fetch("/user/signin?" + params.toString()).then((response) => {
                         if(response.status === 200){
+                            response.json().then((value) => {
+                                localStorage.setItem("token", value)
+                            })
                             window.location.href = "/static/index.html"
                         }
                     })
