@@ -12,6 +12,9 @@ tokens = {}
 favorites = {}
 chats = {}
 
+users["fake1"] = "password1"
+users["fake2"] = "password2"
+
 
 @app.get("/user/signup")
 def signup(username: str, password: str) -> str:
@@ -65,22 +68,18 @@ def get_list_of_favorites(token: str):
     if token not in tokens:
         raise HTTPException(status_code=400)
     username = tokens[token]
-    return [
-        {
+    friends = favorites[username]
+
+    result = []
+    for f in friends:
+        result.append({
             "imgLink": "https://i.pravatar.cc/100?id=2",
             "time": "5:11PM",
-            "username": "User 1",
+            "username": f,
             "lastMsg": "This is the last message",
             "counter": "1",
-        },
-        {
-            "imgLink": "https://i.pravatar.cc/100?id=2",
-            "time": "3:44PM",
-            "username": "User 2",
-            "lastMsg": "This is the last message",
-            "counter": "23",
-        },
-    ]
+        })
+    return result
 
 
 @app.get("/chat")
