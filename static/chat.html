@@ -154,8 +154,8 @@
     </header>
     <div class="Messages-Container" id="Messages-Container"></div>
     <div class="Input-Container">
-        <input type="text" placeholder="Message">
-        <button>Send</button>
+        <input id="Message-Input" type="text" placeholder="Message">
+        <button id="Send-Button">Send</button>
     </div>
     
     <script>
@@ -224,6 +224,18 @@
                 setMessages(data.messages, data.username)
             })
 
+            const submit = document.getElementById("Send-Button")
+            submit.addEventListener("click", () => {
+                const input = document.getElementById("Message-Input")
+                const params = new URLSearchParams({
+                    token: localStorage.getItem("token"),
+                    favorite_name: friend,
+                    message_body: input.value,
+                })
+                fetch("/chat/send?" + params.toString()).then(() => {
+                    window.location.reload()
+                })
+            })
         })
     </script>
 </body>
