@@ -187,7 +187,8 @@
 
         const setMessages = (messages, friend) => {
             const container = document.getElementById("Messages-Container")
-
+            container.innerHTML = ""
+            console.log(messages)
             messages.map(m => {
                 const text = document.createElement("div")
                 text.className = "Message-Text"
@@ -236,6 +237,12 @@
                     window.location.reload()
                 })
             })
+
+            setInterval(() => {
+                fetchMessages(friend).then(data => {
+                    setMessages(data.messages, data.username)
+                })
+            }, 1000)
         })
     </script>
 </body>
