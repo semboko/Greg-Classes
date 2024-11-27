@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from uvicorn import run
 from secrets import token_hex
@@ -67,6 +67,13 @@ app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
+# Dependency 1
+def get_user(token: str) -> str:
+    if token not in tokens:
+        raise HTTPException(status_code=400)
+    return tokens[token]
+
+
 @app.get("/user/signup")
 def signup(username: str, password: str) -> str:
     if username in users:
@@ -89,10 +96,7 @@ def signin(username: str, password: str) -> str:
 
 
 @app.get("/user/search")
-def search(token: str, prefix: str):
-    if token not in tokens:
-        raise HTTPException(status_code=400)
-
+def search(prefix: str, username: str = Depends(get_user)):
     if len(prefix) < 3:
         return []
 
@@ -105,39 +109,31 @@ def search(token: str, prefix: str):
 
 
 @app.get("/favorite/add")
-def add_to_favorites(token: str, favorite_name: str):
-    if token not in tokens:
-        raise HTTPException(status_code=400)
-    username = tokens[token]
+def add_to_favorites(favorite_name: str, username: str = Depends(get_user)):
     favorites[username].append(favorite_name)
     pair = frozenset((username, favorite_name))
     chats[pair] = []
 
 
 @app.get("/favorite/list")
-def get_list_of_favorites(token: str):
-    if token not in tokens:
-        raise HTTPException(status_code=400)
-    username = tokens[token]
+def get_list_of_favorites(username: str = Depends(get_user)):
     friends = favorites[username]
-
     result = []
     for f in friends:
-        result.append({
-            "imgLink": "https://i.pravatar.cc/100?id=2",
-            "time": "5:11PM",
-            "username": f,
-            "lastMsg": "This is the last message",
-            "counter": "1",
-        })
+        result.append(
+            {
+                "imgLink": "https://i.pravatar.cc/100?id=2",
+                "time": "5:11PM",
+                "username": f,
+                "lastMsg": "This is the last message",
+                "counter": "1",
+            }
+        )
     return result
 
 
 @app.get("/chat")
-def get_messages(token: str, favorite_name: str):
-    if token not in tokens:
-        raise HTTPException(status_code=400)
-    username = tokens[token]
+def get_messages(favorite_name: str, username: str = Depends(get_user)):
     pair = frozenset((username, favorite_name))
     return {
         "username": favorite_name,
@@ -147,16 +143,17 @@ def get_messages(token: str, favorite_name: str):
 
 
 @app.get("/chat/send")
-def send_message(token: str, favorite_name: str, message_body: str):
-    if token not in tokens:
-        raise HTTPException(status_code=400)
-    username = tokens[token]
+def send_message(
+    favorite_name: str, message_body: str, username: str = Depends(get_user)
+):
     pair = frozenset((username, favorite_name))
-    chats[pair].append({
-        "text": message_body,
-        "time": int(datetime.now().timestamp()),
-        "author": username,
-    })
+    chats[pair].append(
+        {
+            "text": message_body,
+            "time": int(datetime.now().timestamp()),
+            "author": username,
+        }
+    )
 
 
 run(app)
